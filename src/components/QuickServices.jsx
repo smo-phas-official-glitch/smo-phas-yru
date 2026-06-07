@@ -6,14 +6,14 @@ const services = [
   {
     name: 'จองห้องประชุม',
     icon: Calendar,
-    url: 'https://yrucouncilroombooking.vercel.app',
+    url: '',
     color: 'bg-blue-500',
     external: true
   },
   {
     name: 'สมัครอนุกรรมการ',
     icon: UserPlus,
-    url: 'https://docs.google.com/forms/d/e/1FAIpQLSd7x85NPLRd7uNtip3hGrQl8G4zhFdtRUybGbExXunEmlxDKw/viewform',
+    url: 'https://docs.google.com/forms/d/e/1FAIpQLSf4PugLSle5aMYwZihV5cxP7HPsbXwGpkx1iZhdOWr4RNYIXQ/viewform',
     color: 'bg-yru-pink',
     external: true
   },
