@@ -1,0 +1,139 @@
+.pill-nav-wrapper {
+  width: 100%;
+  max-width: 1400px;
+  margin: 0 auto;
+}
+
+.pill-nav-container {
+  display: flex;
+  align-items: center;
+  background: rgba(255, 255, 255, 0.9);
+  backdrop-filter: blur(20px);
+  -webkit-backdrop-filter: blur(20px);
+  border-radius: 9999px;
+  padding: 6px 10px;
+  box-shadow: 0 10px 40px rgba(0, 0, 0, 0.08);
+  border: 1px solid rgba(0, 0, 0, 0.05);
+  transition: all 0.4s ease;
+  width: fit-content;
+  margin: 0 auto;
+}
+
+.branding-section {
+  padding: 0 16px 0 4px;
+  height: 48px;
+}
+
+.branding-logo {
+  flex-shrink: 0;
+}
+
+.branding-text {
+  display: flex;
+  flex-direction: column;
+  line-height: 1.1;
+}
+
+.branding-name {
+  color: var(--color-yru-pink);
+  font-size: 0.95rem;
+}
+
+@media (max-width: 1280px) {
+  .branding-name {
+    font-size: 0.85rem;
+  }
+}
+
+.branding-sub {
+  color: #64748b;
+  font-size: 10px;
+  font-weight: 700;
+}
+
+.pill-active-bg {
+  position: absolute;
+  top: 0;
+  left: 0;
+  height: 100%;
+  background: var(--color-yru-pink);
+  border-radius: 9999px;
+  z-index: 0;
+  pointer-events: none;
+  box-shadow: 0 8px 20px rgba(236, 72, 153, 0.3);
+}
+
+.pill-link {
+  position: relative;
+  z-index: 1;
+  padding: 0 16px;
+  height: 44px;
+  display: flex;
+  align-items: center;
+  font-size: 0.85rem;
+  font-weight: 800;
+  text-decoration: none;
+  transition: all 0.3s ease;
+  white-space: nowrap;
+  letter-spacing: -0.01em;
+}
+
+.pill-link.active {
+  color: white;
+}
+
+/* Side Drawer styling */
+.mobile-drawer-overlay {
+  position: fixed;
+  inset: 0;
+  background: rgba(15, 23, 42, 0.4);
+  backdrop-filter: blur(8px);
+  z-index: 100;
+}
+
+.mobile-drawer-content {
+  position: fixed;
+  top: 0;
+  right: 0;
+  bottom: 0;
+  width: 320px;
+  max-width: 85vw;
+  background: white;
+  z-index: 101;
+  padding: 32px 20px;
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+  box-shadow: -10px 0 50px rgba(0, 0, 0, 0.1);
+  overflow-y: auto;
+  -webkit-overflow-scrolling: touch;
+}
+
+@media (max-width: 1280px) {
+  .pill-nav-container {
+    width: 95%;
+    max-width: none;
+    justify-content: space-between;
+    padding: 6px 12px;
+  }
+
+
+}
+
+@media (max-width: 1024px) {
+  .pill-nav-container {
+    padding: 4px 8px;
+  }
+}
+
+/* Hide scrollbar for Chrome, Safari and Opera */
+.no-scrollbar::-webkit-scrollbar {
+  display: none;
+}
+
+/* Hide scrollbar for IE, Edge and Firefox */
+.no-scrollbar {
+  -ms-overflow-style: none;  /* IE and Edge */
+  scrollbar-width: none;  /* Firefox */
+}
+

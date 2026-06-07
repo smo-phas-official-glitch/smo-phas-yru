@@ -1,0 +1,132 @@
+/* 
+ * ระบบดีไซน์ (Design System) ของสโมสรนักศึกษาคณะสาธารณะสุขฯ มรย.
+ * สไตล์ระดับ Global และ Design Tokens
+ */
+
+@import "tailwindcss";
+
+/* ─── TYPOGRAPHY: ฟอนต์ Anakotmai (อนาคตใหม่) โดย Anakinz ─── */
+@font-face {
+  font-family: 'Anakotmai';
+  src: url('/fonts/Anakotmai/anakotmai-light.woff2') format('woff2'),
+       url('/fonts/Anakotmai/anakotmai-light.woff') format('woff');
+  font-weight: 300;
+  font-style: normal;
+  font-display: swap;
+}
+
+@font-face {
+  font-family: 'Anakotmai';
+  src: url('/fonts/Anakotmai/anakotmai-medium.woff2') format('woff2'),
+       url('/fonts/Anakotmai/anakotmai-medium.woff') format('woff');
+  font-weight: 400;
+  font-style: normal;
+  font-display: swap;
+}
+
+@font-face {
+  font-family: 'Anakotmai';
+  src: url('/fonts/Anakotmai/anakotmai-bold.woff2') format('woff2'),
+       url('/fonts/Anakotmai/anakotmai-bold.woff') format('woff');
+  font-weight: 700;
+  font-style: normal;
+  font-display: swap;
+}
+
+/* ─── DESIGN TOKENS (ตัวแปรสีและฟอนต์) ─── */
+@theme {
+  --color-yru-pink: #990000;
+  --color-yru-dark-pink: #660000;
+  --color-yru-grey: #64748b;
+  --color-yru-dark: #1e293b;
+  --color-yru-light: #ffffff;
+  
+  /* ชื่อเรียกตามหน้าที่การใช้งาน (Semantic Aliases) */
+  --color-brand-primary: var(--color-yru-pink);
+  --color-brand-secondary: var(--color-yru-grey);
+
+  --font-anakotmai: "Anakotmai", sans-serif;
+  --font-anuphan: "Anakotmai", "Anuphan", sans-serif;
+  --font-kanit: "Anakotmai", "Kanit", sans-serif;
+  --font-inter: "Anakotmai", "Inter", sans-serif;
+}
+
+/* ─── การตั้งค่าพื้นฐาน (GLOBAL RESET) ─── */
+* {
+  font-family: "Anakotmai", sans-serif !important;
+  font-style: normal !important;
+}
+
+:root {
+  font-synthesis: none;
+  text-rendering: optimizeLegibility;
+  -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale;
+  background-color: var(--color-yru-light);
+  color: var(--color-yru-dark);
+}
+
+h1, h2, h3, h4, h5, h6 {
+  letter-spacing: -0.01em;
+  font-weight: 800;
+  line-height: 1.1;
+}
+
+html, body, #root {
+  margin: 0;
+  padding: 0;
+  width: 100%;
+  max-width: 100vw;
+  overflow-x: hidden;
+  position: relative;
+  min-height: 100vh;
+}
+
+/* ─── คลาสยูทิลิตี้ (UTILITY CLASSES) ─── */
+
+/* เอฟเฟกต์กระจกโปร่งแสง (Glassmorphism) */
+.glass {
+  background: rgba(255, 255, 255, 0.7);
+  backdrop-filter: blur(20px);
+  -webkit-backdrop-filter: blur(20px);
+  border: 1px solid rgba(255, 255, 255, 0.4);
+}
+
+/* คอนเทนเนอร์นำทางรูปทรงแคปซูล */
+.capsule-nav {
+  width: calc(100% - 2rem);
+  max-width: 1200px;
+  margin-left: auto;
+  margin-right: auto;
+  border-radius: 9999px;
+  padding: 0.5rem 1.5rem;
+}
+
+/* กระจกโทนเข้มสำหรับหน้าต่างซ้อนทับ (Overlay) */
+.dark-glass {
+  background: rgba(30, 41, 59, 0.8);
+  backdrop-filter: blur(12px);
+  -webkit-backdrop-filter: blur(12px);
+  border: 1px solid rgba(255, 255, 255, 0.1);
+}
+
+/* พื้นหลังไล่สีตามสีแบรนด์ มรย. */
+.gradient-yru {
+  background: linear-gradient(135deg, var(--color-yru-pink) 0%, var(--color-yru-dark-pink) 100%);
+}
+
+/* เอฟเฟกต์ตัวอักษรไล่สี */
+.text-gradient {
+  background-clip: text;
+  -webkit-background-clip: text;
+  -webkit-text-fill-color: transparent;
+  background-image: linear-gradient(to right, var(--color-yru-pink), var(--color-yru-grey));
+}
+
+.modern-tracking {
+    letter-spacing: -0.05em;
+}
+
+.heavy-italic {
+    font-weight: 900;
+}

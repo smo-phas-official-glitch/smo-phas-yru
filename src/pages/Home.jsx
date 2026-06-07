@@ -1,0 +1,103 @@
+/**
+ * Home.jsx
+ * หน้าแรก (Landing Page) ของเว็บไซต์สโมสรนักศึกษาคณะสาธารณะสุขฯ มรย.
+ * ประกอบด้วยแบนเนอร์เลื่อนรูปผู้สมัคร, โลโก้พันธมิตร และข่าวสารล่าสุดจาก Facebook
+ */
+
+import { motion } from 'framer-motion';
+import { Users } from 'lucide-react';
+
+/* ─── นำเข้าคอมโพเนนต์ต่างๆ ─── */
+import CandidateSection from '../components/CandidateSection';
+import FacebookFeed from '../components/FacebookFeed';
+import ActivityCalendar from '../components/ActivityCalendar';
+
+export default function Home() {
+  return (
+    <div className="pt-0">
+
+      {/* ─── ส่วนหัว (HERO SECTION) ─── 
+          แสดงแบนเนอร์เลื่อนแบบไดนามิกของทีมผู้บริหารและหัวหน้าฝ่าย
+      */}
+      <CandidateSection />
+
+      {/* ─── ส่วนข่าวสารจากโซเชียล (SOCIAL FEED SECTION) ─── 
+          ดึงข้อมูลล่าสุดจากหน้า Facebook ของสโมสรนักศึกษาคณะสาธารณะสุขและสหเวชศาสตร์
+      */}
+      <section className="py-32 bg-slate-50 relative z-20 border-b border-slate-100">
+        <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+          <div className="flex flex-col lg:flex-row items-center gap-16 justify-between">
+
+            {/* ฝั่งซ้าย: คำอธิบายและสถิติคณะผู้ติดตาม */}
+            <div className="lg:w-1/2 flex flex-col justify-center">
+              <span className="text-yru-pink font-black text-xs uppercase tracking-[0.4em] mb-4 block">Official Social Media</span>
+              <h2 className="text-5xl md:text-7xl font-black text-slate-900 mb-6 leading-[1.1] tracking-tight">
+                ติดตามข่าวสาร<br />
+                <span className="text-yru-pink">& กิจกรรมล่าสุด</span>
+              </h2>
+              <p className="text-slate-500 font-bold leading-relaxed text-lg mb-10 border-l-4 border-slate-300 pl-6 space-y-2">
+                รับข่าวสาร ประกาศสำคัญ และภาพบรรยากาศกิจกรรมต่างๆ จากสโมสรนักศึกษาคณะสาธารณะสุขและสหเวชศาสตร์ มหาวิทยาลัยราชภัฏยะลา สดใหม่ส่งตรงจากหน้าแฟนเพจ <br />(อัปเดตอัตโนมัติ)
+              </p>
+
+              <div className="flex flex-col gap-6 w-full sm:w-fit">
+                {/* Facebook */}
+                <div className="flex flex-col sm:flex-row items-start sm:items-center gap-6">
+                  <a href="https://www.facebook.com/profile.php?id=61586876716834" target="_blank" rel="noopener noreferrer" className="px-6 py-4 bg-blue-600 text-white font-black hover:bg-blue-700 transition-colors uppercase tracking-widest text-sm flex items-center justify-center gap-3 rounded-none shadow-xl w-full sm:w-64">
+                    <svg className="w-5 h-5 fill-current shrink-0" viewBox="0 0 24 24">
+                      <path d="M24 12.073c0-6.627-5.373-12-12-12s-12 5.373-12 12c0 5.99 4.388 10.954 10.125 11.854v-8.385H7.078v-3.469h3.047V9.43c0-3.007 1.792-4.669 4.533-4.669 1.312 0 2.686.235 2.686.235v2.953H15.83c-1.491 0-1.956.925-1.956 1.874v2.25h3.328l-.532 3.469h-2.796v8.385C19.612 23.027 24 18.062 24 12.073z" />
+                    </svg>
+                    Facebook Page
+                  </a>
+                  <div className="flex items-center gap-3 pl-2 sm:pl-0">
+                    <div className="w-10 h-10 rounded-full border-2 border-slate-100 bg-white flex items-center justify-center text-blue-600 shadow-sm shrink-0">
+                      <Users size={16} />
+                    </div>
+                    <div className="flex flex-col">
+                      <span className="text-[10px] font-black text-slate-400 uppercase tracking-widest">Followers</span>
+                      <span className="text-lg font-black text-slate-900 leading-none">8.8K+</span>
+                    </div>
+                  </div>
+                </div>
+
+                {/* Instagram */}
+                <div className="flex flex-col sm:flex-row items-start sm:items-center gap-6">
+                  <a href="https://www.instagram.com/smo_phas_yru_official?igsh=MTUzZ3J5aGV5anVh&utm_source=qr" target="_blank" rel="noopener noreferrer" className="px-6 py-4 bg-gradient-to-r from-[#833ab4] via-[#fd1d1d] to-[#fcb045] text-white font-black hover:opacity-90 transition-opacity uppercase tracking-widest text-sm flex items-center justify-center gap-3 rounded-none shadow-xl w-full sm:w-64">
+                    <svg className="w-5 h-5 fill-current shrink-0" viewBox="0 0 24 24">
+                      <path d="M12 2.163c3.204 0 3.584.012 4.85.07 3.252.148 4.771 1.691 4.919 4.919.058 1.265.069 1.645.069 4.849 0 3.205-.012 3.584-.069 4.849-.149 3.225-1.664 4.771-4.919 4.919-1.266.058-1.644.07-4.85.07-3.204 0-3.584-.012-4.849-.07-3.26-.149-4.771-1.699-4.919-4.92-.058-1.265-.07-1.644-.07-4.849 0-3.204.013-3.583.07-4.849.149-3.227 1.664-4.771 4.919-4.919 1.266-.057 1.645-.069 4.849-.069zM12 0C8.741 0 8.333.014 7.053.072 2.695.272.273 2.69.073 7.052.014 8.333 0 8.741 0 12c0 3.259.014 3.668.072 4.948.2 4.358 2.618 6.78 6.98 6.98C8.333 23.986 8.741 24 12 24c3.259 0 3.668-.014 4.948-.072 4.354-.2 6.782-2.618 6.979-6.98.059-1.28.073-1.689.073-4.948 0-3.259-.014-3.667-.072-4.947-.196-4.354-2.617-6.78-6.979-6.98C15.668.014 15.259 0 12 0zm0 5.838a6.162 6.162 0 100 12.324 6.162 6.162 0 000-12.324zM12 16a4 4 0 110-8 4 4 0 010 8zm6.406-11.845a1.44 1.44 0 100 2.881 1.44 1.44 0 000-2.881z" />
+                    </svg>
+                    INSTAGRAM Page
+                  </a>
+                  <div className="flex items-center gap-3 pl-2 sm:pl-0">
+                    <div className="w-10 h-10 rounded-full border-2 border-slate-100 bg-white flex items-center justify-center text-[#E4405F] shadow-sm shrink-0">
+                      <Users size={16} />
+                    </div>
+                    <div className="flex flex-col">
+                      <span className="text-[10px] font-black text-slate-400 uppercase tracking-widest">Followers</span>
+                      <span className="text-lg font-black text-slate-900 leading-none">4.2K+</span>
+                    </div>
+                  </div>
+                </div>
+              </div>
+            </div>
+
+            {/* ฝั่งขวา: วิดเจ็ต Facebook Feed */}
+            <div className="lg:w-1/2 flex justify-center lg:justify-end w-full">
+              <div className="relative group">
+                <div className="absolute inset-0 bg-yru-pink translate-x-4 translate-y-4 z-0 transition-transform group-hover:translate-x-6 group-hover:translate-y-6"></div>
+                <div className="relative z-10 w-full max-w-[500px]">
+                  <FacebookFeed width={500} height={700} />
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </section>
+
+      {/* ─── ส่วนปฏิทินกิจกรรม (ACTIVITY CALENDAR SECTION) ─── 
+          แสดงตารางกิจกรรมแบบ Interactive ก่อนถึง Footer
+      */}
+      <ActivityCalendar />
+
+    </div>
+  );
+}
