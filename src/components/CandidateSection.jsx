@@ -42,10 +42,21 @@ export default function CandidateSection() {
     return () => clearInterval(interval);
   }, [candidates.length]);
 
-  if (loading || candidates.length === 0) {
+  if (loading) {
     return (
       <section className="relative w-full h-[100vh] min-h-[850px] overflow-hidden bg-white flex items-center justify-center">
         <CustomLoader fullScreen={true} />
+      </section>
+    );
+  }
+
+  if (candidates.length === 0) {
+    return (
+      <section className="relative w-full h-[100vh] min-h-[850px] overflow-hidden bg-yru-pink flex items-center justify-center">
+        <div className="text-white text-center">
+          <h2 className="text-4xl md:text-6xl font-black drop-shadow-xl mb-4">ไม่มีข้อมูล</h2>
+          <p className="text-xl md:text-2xl font-bold opacity-80">กรุณาเพิ่มข้อมูลใน Google Sheets</p>
+        </div>
       </section>
     );
   }
