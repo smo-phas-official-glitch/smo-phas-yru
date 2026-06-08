@@ -45,7 +45,7 @@ export default function App() {
   useEffect(() => {
     const timer = setTimeout(() => {
       setInitialLoading(false);
-    }, 4000); // 6 วินาที รอแอนิเมชันให้แสดงนานขึ้น
+    }, 3000); // 3 วินาที รอแอนิเมชันให้แสดงนานขึ้น
     return () => clearTimeout(timer);
   }, []);
 
