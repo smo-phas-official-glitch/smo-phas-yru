@@ -1,5 +1,5 @@
-# Public Health Student Council YRU (สโมสรนักศึกษาคณะสาธารณสุขศาสตร์และสหเวชศาสตร์ มรย.)
-
+# Public Health Student Council YRU (สโมสรนักศึกษา มรย.)
+ณสุขศาสตร์และสหเวชศาสตร์
 This is the official project for the Public Health Student Council website, built with React + Vite and TailwindCSS.
 
 ## Technologies Used
