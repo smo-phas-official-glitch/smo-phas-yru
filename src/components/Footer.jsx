@@ -32,7 +32,7 @@ export default function Footer() {
                 />
               </div>
               <div className="flex flex-col">
-                <span className="text-xl font-black text-white uppercase tracking-tight">Student Council</span>
+                <span className="text-xl font-black text-white uppercase tracking-tight">SMO PHAS YRU</span>
                 <span className="text-xs text-slate-500 font-bold uppercase tracking-widest">Yala Rajabhat University</span>
               </div>
             </div>

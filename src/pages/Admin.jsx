@@ -93,7 +93,14 @@ export default function Admin() {
   const handleCrud = async (action, rowIndex = null) => {
     setIsFetching(true);
     try {
-      const payload = { action, table: activeTab, password: adminPassword, rowIndex, data: formData };
+      let dataToSave = { ...formData };
+      if (activeTab === 'ชุดบริหาร') {
+        if (!dataToSave.tier) {
+          dataToSave.tier = '1';
+        }
+        dataToSave.type = dataToSave.tier === '4' ? 'member' : 'executive';
+      }
+      const payload = { action, table: activeTab, password: adminPassword, rowIndex, data: dataToSave };
       if (formData.image_base64) {
         payload.image_base64 = formData.image_base64;
       }
@@ -169,9 +176,17 @@ export default function Admin() {
   const renderTable = () => {
     if (adminData.length === 0) return <div className="p-8 text-center text-slate-500">ไม่มีข้อมูล</div>;
     const headers = Object.keys(adminData[0]).filter(k => k !== 'rowIndex');
+    if (activeTab === 'ชุดบริหาร' && !headers.includes('tier')) {
+      const idIdx = headers.indexOf('id');
+      if (idIdx !== -1) {
+        headers.splice(idIdx + 1, 0, 'tier');
+      } else {
+        headers.push('tier');
+      }
+    }
     
     const tableHeadersMap = {
-      id: 'ลำดับ', title: activeTab === 'ปฏิทิน' ? 'ชื่อกิจกรรม' : 'ตำแหน่ง', 
+      id: 'ลำดับ', tier: 'ขั้น (Tier)', title: activeTab === 'ปฏิทิน' ? 'ชื่อกิจกรรม' : 'ตำแหน่ง', 
       name: activeTab === 'ฝ่ายงาน' ? 'ชื่อฝ่ายงาน' : 'ชื่อ-สกุล', 
       major: 'สาขาวิชา', faculty: 'คณะ', 
       image: 'รูปภาพ', Image: 'รูปภาพ', motto: 'คติประจำใจ', chair: 'หัวหน้าฝ่าย', description: 'รายละเอียด', 
@@ -226,12 +241,13 @@ export default function Admin() {
   const renderModal = () => {
     if (!showModal) return null;
     let fields = [];
-    if (activeTab === 'ชุดบริหาร') fields = ['id', 'title', 'name', 'major', 'faculty', 'image', 'motto', 'educationBackground', 'experience', 'ig', 'facebook'];
+    if (activeTab === 'ชุดบริหาร') fields = ['id', 'tier', 'title', 'name', 'major', 'faculty', 'image', 'motto', 'educationBackground', 'experience', 'ig', 'facebook'];
     if (activeTab === 'ฝ่ายงาน') fields = ['id', 'name', 'chair', 'description', 'vision', 'bgImage', 'duties', 'members'];
     if (activeTab === 'ปฏิทิน') fields = ['title', 'start', 'end', 'category', 'location', 'owner'];
 
     const fieldLabels = {
       id: 'ลำดับ (ID)', 
+      tier: 'ขั้น (Tier)',
       title: activeTab === 'ปฏิทิน' ? 'ชื่อกิจกรรม' : 'ตำแหน่ง', 
       name: activeTab === 'ฝ่ายงาน' ? 'ชื่อฝ่ายงาน' : 'ชื่อ-สกุล', 
       major: 'สาขาวิชา', faculty: 'คณะ', 
@@ -274,6 +290,17 @@ export default function Admin() {
                         return null;
                      })()}
                   </div>
+                ) : activeTab === 'ชุดบริหาร' && f === 'tier' ? (
+                  <select value={formData[f] || '1'} onChange={e => {
+                    const selectedTier = e.target.value;
+                    const calculatedType = selectedTier === '4' ? 'member' : 'executive';
+                    setFormData({...formData, tier: selectedTier, type: calculatedType});
+                  }} className="w-full p-2 border rounded bg-white">
+                    <option value="1">ขั้น 1 - นายก (President)</option>
+                    <option value="2">ขั้น 2 - รองประธาน (Vice President)</option>
+                    <option value="3">ขั้น 3 - คณะกรรมการ (Committee)</option>
+                    <option value="4">ขั้น 4 - สมาชิก (Member)</option>
+                  </select>
                 ) : f === 'educationBackground' || f === 'experience' || f === 'duties' || f === 'members' || f === 'description' || f === 'vision' ? (
                   <textarea rows={3} value={formData[f] || ''} onChange={e => setFormData({...formData, [f]: e.target.value})} className="w-full p-2 border rounded" placeholder="พิมพ์ข้อความแล้วกด Enter เพื่อขึ้นบรรทัดใหม่สำหรับข้อถัดไป..." />
                 ) : f === 'start' || f === 'end' ? (

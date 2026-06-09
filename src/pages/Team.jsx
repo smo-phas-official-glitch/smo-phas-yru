@@ -14,23 +14,33 @@ const GAS_URL = import.meta.env.VITE_GAS_WEBAPP_URL || '';
 
 export default function Team() {
   const [teamData, setTeamData] = useState([]);
+  const [deptCount, setDeptCount] = useState(0);
   const [loading, setLoading] = useState(true);
 
   useEffect(() => {
-    const fetchTeam = async () => {
+    const fetchData = async () => {
       try {
-        const res = await fetch(`${GAS_URL}?action=public&table=ชุดบริหาร`);
-        const json = await res.json();
-        if (json.success) {
-          setTeamData(json.data || []);
+        const [teamRes, deptRes] = await Promise.all([
+          fetch(`${GAS_URL}?action=public&table=ชุดบริหาร`),
+          fetch(`${GAS_URL}?action=public&table=ฝ่ายงาน`)
+        ]);
+        const [teamJson, deptJson] = await Promise.all([
+          teamRes.json(),
+          deptRes.json()
+        ]);
+        if (teamJson.success) {
+          setTeamData(teamJson.data || []);
+        }
+        if (deptJson.success) {
+          setDeptCount(deptJson.data ? deptJson.data.length : 0);
         }
       } catch (e) {
-        console.error('Error fetching team data', e);
+        console.error('Error fetching team/department data', e);
       } finally {
         setLoading(false);
       }
     };
-    if (GAS_URL) fetchTeam();
+    if (GAS_URL) fetchData();
     else setLoading(false);
   }, []);
 
@@ -38,14 +48,46 @@ export default function Team() {
     return <div className="min-h-screen flex items-center justify-center"><CustomLoader fullScreen={false} /></div>;
   }
 
-  // Fallback structure if data is empty or format doesn't match perfectly
-  const executives = teamData.filter(m => m.type === 'executive' || !m.type).slice(0, 10);
-  const members = teamData.filter(m => m.type === 'member');
+  // Group members into Tiers 1-4 with backwards compatibility
+  const tier1Members = [];
+  const tier2Members = [];
+  const tier3Members = [];
+  const tier4Members = [];
 
-  // จัดกลุ่มสมาชิกตามตำแหน่ง
-  const president = executives[0] || null;
-  const vicePresidents = executives.slice(1, 3);
-  const otherExecutives = executives.slice(3);
+  // Filter executives for fallback index calculation
+  const fallbackExecutives = teamData.filter(m => !m.tier && (m.type === 'executive' || !m.type));
+
+  teamData.forEach((member) => {
+    if (member.tier) {
+      const t = String(member.tier).trim();
+      if (t === '1') tier1Members.push(member);
+      else if (t === '2') tier2Members.push(member);
+      else if (t === '3') tier3Members.push(member);
+      else if (t === '4') tier4Members.push(member);
+      else {
+        tier4Members.push(member);
+      }
+    } else {
+      // Fallback logic for legacy data
+      if (member.type === 'member') {
+        tier4Members.push(member);
+      } else {
+        const idx = fallbackExecutives.findIndex(e => e.id === member.id || e.rowIndex === member.rowIndex);
+        if (idx === 0) {
+          tier1Members.push(member);
+        } else if (idx === 1 || idx === 2) {
+          tier2Members.push(member);
+        } else {
+          tier3Members.push(member);
+        }
+      }
+    }
+  });
+
+  const president = tier1Members[0] || null;
+  const vicePresidents = tier2Members;
+  const otherExecutives = tier3Members;
+  const generalMembers = tier4Members;
 
   return (
     <div className="pt-0 pb-48 min-h-screen font-kanit bg-gradient-to-br from-pink-100/50 via-white to-slate-200/40 bg-fixed">
@@ -127,8 +169,8 @@ export default function Team() {
                     {/* ฝั่งซ้าย — สถิติตัวเลขตกแต่ง */}
                     <div className="hidden lg:flex flex-col items-end gap-6 pr-4">
                         {[
-                          { num: '10', label: 'ฝ่ายงาน', sub: 'Departments' },
-                          { num: executives.length + members.length, label: 'สมาชิกสภา', sub: 'Council Members' },
+                          { num: deptCount || '10', label: 'ฝ่ายงาน', sub: 'Departments' },
+                          { num: teamData.length || '0', label: 'สมาชิกสภา', sub: 'Council Members' },
                           { num: '2569', label: 'ปีการศึกษา', sub: 'Academic Year' },
                         ].map((s, i) => (
                           <motion.div
@@ -246,7 +288,7 @@ export default function Team() {
               </div>
               <h2 className="text-5xl md:text-6xl font-black text-slate-900 leading-none tracking-tight">
                 สมาชิกสภา<br/>
-                <span className="text-slate-300 font-medium">{members.length} ท่าน</span>
+                <span className="text-slate-300 font-medium">{generalMembers.length} ท่าน</span>
               </h2>
             </div>
             <div className="bg-slate-50 p-6 border-2 border-slate-100 font-bold text-slate-500 max-w-xs text-right">
@@ -255,7 +297,7 @@ export default function Team() {
           </div>
 
           <div className="flex flex-wrap justify-center gap-10">
-            {members.map((member) => (
+            {generalMembers.map((member) => (
                 <div key={member.id} className="w-full sm:w-[calc(50%-1.25rem)] md:w-[calc(33.333%-1.666rem)] lg:w-[calc(25%-1.875rem)]">
                     <MemberCard member={member} />
                 </div>
