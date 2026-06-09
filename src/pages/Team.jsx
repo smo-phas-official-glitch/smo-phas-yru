@@ -48,41 +48,13 @@ export default function Team() {
     return <div className="min-h-screen flex items-center justify-center"><CustomLoader fullScreen={false} /></div>;
   }
 
-  // Group members into Tiers 1-4 with backwards compatibility
-  const tier1Members = [];
-  const tier2Members = [];
-  const tier3Members = [];
-  const tier4Members = [];
+  // Group members into Tiers 1-4. Only display members with a defined tier.
+  const activeMembers = teamData.filter(m => m.tier && String(m.tier).trim() !== '');
 
-  // Filter executives for fallback index calculation
-  const fallbackExecutives = teamData.filter(m => !m.tier && (m.type === 'executive' || !m.type));
-
-  teamData.forEach((member) => {
-    if (member.tier) {
-      const t = String(member.tier).trim();
-      if (t === '1') tier1Members.push(member);
-      else if (t === '2') tier2Members.push(member);
-      else if (t === '3') tier3Members.push(member);
-      else if (t === '4') tier4Members.push(member);
-      else {
-        tier4Members.push(member);
-      }
-    } else {
-      // Fallback logic for legacy data
-      if (member.type === 'member') {
-        tier4Members.push(member);
-      } else {
-        const idx = fallbackExecutives.findIndex(e => e.name === member.name);
-        if (idx === 0) {
-          tier1Members.push(member);
-        } else if (idx === 1 || idx === 2) {
-          tier2Members.push(member);
-        } else {
-          tier3Members.push(member);
-        }
-      }
-    }
-  });
+  const tier1Members = activeMembers.filter(m => String(m.tier).trim() === '1');
+  const tier2Members = activeMembers.filter(m => String(m.tier).trim() === '2');
+  const tier3Members = activeMembers.filter(m => String(m.tier).trim() === '3');
+  const tier4Members = activeMembers.filter(m => String(m.tier).trim() === '4');
 
   const president = tier1Members[0] || null;
   const vicePresidents = tier2Members;
@@ -170,7 +142,7 @@ export default function Team() {
                     <div className="hidden lg:flex flex-col items-end gap-6 pr-4">
                         {[
                           { num: deptCount || '10', label: 'ฝ่ายงาน', sub: 'Departments' },
-                          { num: teamData.length || '0', label: 'สมาชิกสภา', sub: 'Council Members' },
+                          { num: activeMembers.length || '0', label: 'สมาชิกสภา', sub: 'Council Members' },
                           { num: '2569', label: 'ปีการศึกษา', sub: 'Academic Year' },
                         ].map((s, i) => (
                           <motion.div
