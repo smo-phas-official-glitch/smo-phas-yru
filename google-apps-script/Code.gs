@@ -5,7 +5,7 @@
  * =============================================================
  */
 
-const ADMIN_PASSWORD  = '0924417197';
+const ADMIN_PASSWORD  = 'Smophas@256999';
 
 function createResponse(data) {
   return ContentService.createTextOutput(JSON.stringify(data))

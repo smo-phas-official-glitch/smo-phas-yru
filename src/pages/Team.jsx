@@ -72,7 +72,7 @@ export default function Team() {
       if (member.type === 'member') {
         tier4Members.push(member);
       } else {
-        const idx = fallbackExecutives.findIndex(e => e.id === member.id || e.rowIndex === member.rowIndex);
+        const idx = fallbackExecutives.findIndex(e => e.name === member.name);
         if (idx === 0) {
           tier1Members.push(member);
         } else if (idx === 1 || idx === 2) {
