@@ -3,6 +3,7 @@ import { motion, AnimatePresence } from 'framer-motion';
 import { ChevronLeft, ChevronRight, ExternalLink } from 'lucide-react';
 import { Link } from 'react-router-dom';
 import CustomLoader from './Loader';
+import { teamData } from '../data/teamData';
 
 const GAS_URL = import.meta.env.VITE_GAS_WEBAPP_URL || '';
 
@@ -12,22 +13,10 @@ export default function CandidateSection() {
   const [index, setIndex] = useState(0);
 
   useEffect(() => {
-    const fetchCandidates = async () => {
-      try {
-        const res = await fetch(`${GAS_URL}?action=public&table=ชุดบริหาร`);
-        const json = await res.json();
-        if (json.success && json.data) {
-          // แสดงสมาชิกทุกคนที่มีอยู่ในชีตชุดบริหาร
-          setCandidates(json.data);
-        }
-      } catch (e) {
-        console.error('Error fetching candidates', e);
-      } finally {
-        setLoading(false);
-      }
-    };
-    if (GAS_URL) fetchCandidates();
-    else setLoading(false);
+    // Filter to only display members with a valid name and image
+    const validCandidates = teamData.filter(m => m.name && m.image);
+    setCandidates(validCandidates);
+    setLoading(false);
   }, []);
 
   const next = () => setIndex((prev) => (prev + 1) % candidates.length);

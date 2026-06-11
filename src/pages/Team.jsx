@@ -9,8 +9,7 @@ import { useState, useEffect } from 'react';
 import MemberCard from '../components/MemberCard';
 import { Shield, Users2, Star, Zap } from 'lucide-react';
 import CustomLoader from '../components/Loader';
-
-const GAS_URL = import.meta.env.VITE_GAS_WEBAPP_URL || '';
+import { teamData as localTeamData, departmentsData as localDepartmentsData } from '../data/teamData';
 
 export default function Team() {
   const [teamData, setTeamData] = useState([]);
@@ -18,30 +17,9 @@ export default function Team() {
   const [loading, setLoading] = useState(true);
 
   useEffect(() => {
-    const fetchData = async () => {
-      try {
-        const [teamRes, deptRes] = await Promise.all([
-          fetch(`${GAS_URL}?action=public&table=ชุดบริหาร`),
-          fetch(`${GAS_URL}?action=public&table=ฝ่ายงาน`)
-        ]);
-        const [teamJson, deptJson] = await Promise.all([
-          teamRes.json(),
-          deptRes.json()
-        ]);
-        if (teamJson.success) {
-          setTeamData(teamJson.data || []);
-        }
-        if (deptJson.success) {
-          setDeptCount(deptJson.data ? deptJson.data.length : 0);
-        }
-      } catch (e) {
-        console.error('Error fetching team/department data', e);
-      } finally {
-        setLoading(false);
-      }
-    };
-    if (GAS_URL) fetchData();
-    else setLoading(false);
+    setTeamData(localTeamData || []);
+    setDeptCount(localDepartmentsData ? localDepartmentsData.length : 0);
+    setLoading(false);
   }, []);
 
   if (loading) {

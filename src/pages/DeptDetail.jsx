@@ -6,6 +6,7 @@ import {
   CheckCircle2, Users2, Info, Loader 
 } from 'lucide-react';
 import { useState, useEffect } from 'react';
+import { departmentsData } from '../data/teamData';
 
 const GAS_URL = import.meta.env.VITE_GAS_WEBAPP_URL || '';
 
@@ -31,45 +32,35 @@ export default function DeptDetail() {
   const numericId = /^\d+$/.test(id) ? parseInt(id, 10) : id;
 
   useEffect(() => {
-    const fetchDept = async () => {
-      try {
-        const res = await fetch(`${GAS_URL}?action=public&table=ฝ่ายงาน`);
-        const json = await res.json();
-        if (json.success && json.data) {
-          const found = json.data.find(d => String(d.id) === String(numericId));
-          // Parse string arrays to actual arrays safely
-          if (found) {
-            if (found.duties) {
-               try { found.duties = typeof found.duties === 'string' && found.duties.startsWith('[') ? JSON.parse(found.duties) : found.duties.split('\n'); } 
-               catch (e) { found.duties = [found.duties]; }
-            } else { found.duties = []; }
+    const found = departmentsData.find(d => String(d.id) === String(numericId));
+    if (found) {
+      // Create a shallow copy to prevent modifying read-only import
+      const cloned = { ...found };
+      if (cloned.duties) {
+         try { cloned.duties = typeof cloned.duties === 'string' && cloned.duties.startsWith('[') ? JSON.parse(cloned.duties) : cloned.duties.split('\n'); } 
+         catch (e) { cloned.duties = [cloned.duties]; }
+      } else { cloned.duties = []; }
 
-            if (found.members) {
-               if (typeof found.members === 'string') {
-                 if (found.members.startsWith('[')) {
-                   try { found.members = JSON.parse(found.members); } catch (e) { found.members = []; }
-                 } else {
-                   found.members = found.members.split('\n').filter(Boolean).map(line => {
-                     const parts = line.split(':');
-                     if (parts.length >= 2) return { role: parts[0].trim(), name: parts.slice(1).join(':').trim() };
-                     return { role: 'สมาชิก', name: line.trim() };
-                   });
-                 }
-               } else if (!Array.isArray(found.members)) {
-                 found.members = [];
-               }
-            } else { found.members = []; }
-          }
-          setDept(found || null);
-        }
-      } catch (e) {
-        console.error('Error fetching department', e);
-      } finally {
-        setLoading(false);
-      }
-    };
-    if (GAS_URL) fetchDept();
-    else setLoading(false);
+      if (cloned.members) {
+         if (typeof cloned.members === 'string') {
+           if (cloned.members.startsWith('[')) {
+             try { cloned.members = JSON.parse(cloned.members); } catch (e) { cloned.members = []; }
+           } else {
+             cloned.members = cloned.members.split('\n').filter(Boolean).map(line => {
+               const parts = line.split(':');
+               if (parts.length >= 2) return { role: parts[0].trim(), name: parts.slice(1).join(':').trim() };
+               return { role: 'สมาชิก', name: line.trim() };
+             });
+           }
+         } else if (!Array.isArray(cloned.members)) {
+           cloned.members = [];
+         }
+      } else { cloned.members = []; }
+      setDept(cloned);
+    } else {
+      setDept(null);
+    }
+    setLoading(false);
   }, [numericId]);
 
   if (loading) {

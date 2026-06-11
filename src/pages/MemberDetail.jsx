@@ -2,6 +2,7 @@ import { useParams, Link } from 'react-router-dom';
 import { motion } from 'framer-motion';
 import { ArrowLeft, BookOpen, GraduationCap, Briefcase, Quote, Mail, Facebook, Instagram, Youtube, Play, ExternalLink, Loader } from 'lucide-react';
 import { useState, useEffect } from 'react';
+import { teamData } from '../data/teamData';
 
 const GAS_URL = import.meta.env.VITE_GAS_WEBAPP_URL || '';
 
@@ -23,28 +24,18 @@ export default function MemberDetail() {
   };
 
   useEffect(() => {
-    const fetchMember = async () => {
-      try {
-        const res = await fetch(`${GAS_URL}?action=public&table=ชุดบริหาร`);
-        const json = await res.json();
-        if (json.success && json.data) {
-          const found = json.data.find(m => String(m.id) === String(numericId));
-          // Parse JSON strings if they are arrays in strings
-          if (found) {
-            try { if (typeof found.experience === 'string') found.experience = JSON.parse(found.experience); } catch (e) { found.experience = found.experience ? found.experience.split('\n') : []; }
-            try { if (typeof found.educationBackground === 'string') found.educationBackground = JSON.parse(found.educationBackground); } catch (e) { found.educationBackground = found.educationBackground ? found.educationBackground.split('\n') : []; }
-            try { if (typeof found.bioText === 'string') found.bioText = JSON.parse(found.bioText); } catch (e) { found.bioText = found.bioText ? found.bioText.split('\n') : null; }
-          }
-          setMember(found || null);
-        }
-      } catch (e) {
-        console.error('Error fetching member', e);
-      } finally {
-        setLoading(false);
-      }
-    };
-    if (GAS_URL) fetchMember();
-    else setLoading(false);
+    const found = teamData.find(m => String(m.id) === String(numericId));
+    if (found) {
+      // Create a shallow copy to prevent modifying read-only import
+      const cloned = { ...found };
+      try { if (typeof cloned.experience === 'string') cloned.experience = JSON.parse(cloned.experience); } catch (e) { cloned.experience = cloned.experience ? cloned.experience.split('\n') : []; }
+      try { if (typeof cloned.educationBackground === 'string') cloned.educationBackground = JSON.parse(cloned.educationBackground); } catch (e) { cloned.educationBackground = cloned.educationBackground ? cloned.educationBackground.split('\n') : []; }
+      try { if (typeof cloned.bioText === 'string') cloned.bioText = JSON.parse(cloned.bioText); } catch (e) { cloned.bioText = cloned.bioText ? cloned.bioText.split('\n') : null; }
+      setMember(cloned);
+    } else {
+      setMember(null);
+    }
+    setLoading(false);
   }, [numericId]);
 
   if (loading) {

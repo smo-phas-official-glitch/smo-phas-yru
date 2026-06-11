@@ -3,6 +3,7 @@ import { motion, AnimatePresence } from 'framer-motion';
 import { Users2, AlertCircle, X, ExternalLink } from 'lucide-react';
 import CustomLoader from '../components/Loader';
 import { useState, useEffect } from 'react';
+import { departmentsData } from '../data/teamData';
 
 const GAS_URL = import.meta.env.VITE_GAS_WEBAPP_URL || '';
 
@@ -12,21 +13,8 @@ export default function Departments() {
   const [loading, setLoading] = useState(true);
 
   useEffect(() => {
-    const fetchDepartments = async () => {
-      try {
-        const res = await fetch(`${GAS_URL}?action=public&table=ฝ่ายงาน`);
-        const json = await res.json();
-        if (json.success) {
-          setDepartments(json.data || []);
-        }
-      } catch (e) {
-        console.error('Error fetching departments', e);
-      } finally {
-        setLoading(false);
-      }
-    };
-    if (GAS_URL) fetchDepartments();
-    else setLoading(false);
+    setDepartments(departmentsData || []);
+    setLoading(false);
   }, []);
 
   if (loading) {
